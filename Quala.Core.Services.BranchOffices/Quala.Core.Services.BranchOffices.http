@@ -1,0 +1,6 @@
+@Quala.Core.Services.BranchOffices_HostAddress = http://localhost:5062
+
+GET {{Quala.Core.Services.BranchOffices_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

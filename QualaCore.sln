@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GateWay", "GateWay", "{0BC6912A-C738-441E-91BC-AE79491F71F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{DD655A8E-E9FE-4D85-9FBD-BE4C4AFB630C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{A3B47D57-4464-4903-9F81-9D4A41E2130D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QualaCore.Services.BranchOfficeAPI", "QualaCore.Services.BranchOfficeAPI\QualaCore.Services.BranchOfficeAPI.csproj", "{1B639E6D-A876-4642-948E-220A3863D84C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualaCore.Services.AuthAPI", "QualaCore.Services.AuthAPI\QualaCore.Services.AuthAPI.csproj", "{284732FB-FBB2-49AD-9DBF-3896EDD67908}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B639E6D-A876-4642-948E-220A3863D84C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B639E6D-A876-4642-948E-220A3863D84C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B639E6D-A876-4642-948E-220A3863D84C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B639E6D-A876-4642-948E-220A3863D84C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{284732FB-FBB2-49AD-9DBF-3896EDD67908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{284732FB-FBB2-49AD-9DBF-3896EDD67908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{284732FB-FBB2-49AD-9DBF-3896EDD67908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{284732FB-FBB2-49AD-9DBF-3896EDD67908}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1B639E6D-A876-4642-948E-220A3863D84C} = {DD655A8E-E9FE-4D85-9FBD-BE4C4AFB630C}
+		{284732FB-FBB2-49AD-9DBF-3896EDD67908} = {DD655A8E-E9FE-4D85-9FBD-BE4C4AFB630C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02186CC5-51C0-4665-8234-2434FA5B8838}
+	EndGlobalSection
+EndGlobal

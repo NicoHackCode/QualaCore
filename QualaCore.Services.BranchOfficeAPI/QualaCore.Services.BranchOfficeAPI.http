@@ -1,0 +1,6 @@
+@QualaCore.Services.BranchOfficeAPI_HostAddress = http://localhost:5215
+
+GET {{QualaCore.Services.BranchOfficeAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
