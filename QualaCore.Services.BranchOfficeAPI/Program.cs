@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -12,6 +13,18 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuración de CORS para permitir orígenes específicos
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000", "http://localhost:4200")
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
 // Add services to the container.
 
 builder.Services.AddDbContext<BranchOfficeContext>(option =>
@@ -19,24 +32,23 @@ builder.Services.AddDbContext<BranchOfficeContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-//Settings DI for my Three Layer
+// Settings DI for my Three Layer
 builder.Services.AddScoped<IBranchOfficeContext, BranchOfficeContext>();
 builder.Services.AddScoped<IBranchOfficeBl, BranchOfficeBl>();
 builder.Services.AddAutoMapper(typeof(MappingBranchOffice));
 
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
-    option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+    option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
     {
         Name = "Authorization",
         Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
         In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
         Scheme = "Bearer"
-
     });
     option.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -48,14 +60,12 @@ builder.Services.AddSwaggerGen(option =>
                     Type = ReferenceType.SecurityScheme,
                     Id = JwtBearerDefaults.AuthenticationScheme
                 }
-            }, new string []{ }
-
+            }, new string[] { }
         }
     });
 });
 
 builder.AddAppAuthentication();
-
 
 builder.Services.AddAuthorization();
 
@@ -68,8 +78,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.UseHttpsRedirection();
+
+// Aplicar la política CORS
+app.UseCors("AllowSpecificOrigins");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -86,10 +99,6 @@ void ApplyMigration()
         if (_db.Database.GetPendingMigrations().Count() > 0)
         {
             _db.Database.Migrate();
-
         }
     }
-
 }
-
-
