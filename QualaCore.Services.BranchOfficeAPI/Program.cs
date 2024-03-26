@@ -19,32 +19,32 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000", "http://localhost:4200")
+            builder.WithOrigins("http://localhost:3000", "http://localhost:4200", "http://127.0.0.1:4200")
                    .AllowAnyMethod()
                    .AllowAnyHeader();
         });
 });
 
-// Add services to the container.
+// Agregar servicios al contenedor.
 
 builder.Services.AddDbContext<BranchOfficeContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// Settings DI for my Three Layer
+// Configuración de DI para mi Tres Capas
 builder.Services.AddScoped<IBranchOfficeContext, BranchOfficeContext>();
 builder.Services.AddScoped<IBranchOfficeBl, BranchOfficeBl>();
 builder.Services.AddAutoMapper(typeof(MappingBranchOffice));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Obtenga más información sobre la configuración de Swagger/OpenAPI en https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGen(option =>
 {
     option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+        Description = "Ingrese la cadena de autorización Bearer de la siguiente manera: `Bearer Generated-JWT-Token`",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         BearerFormat = "JWT",
@@ -71,7 +71,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configurar el pipeline de solicitudes HTTP.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

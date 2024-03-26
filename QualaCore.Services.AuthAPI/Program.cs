@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000", "http://localhost:4200")
+            builder.WithOrigins("http://localhost:3000", "http://localhost:4200", "http://127.0.0.1:4200")
                    .AllowAnyMethod()
                    .AllowAnyHeader();
         });
@@ -27,7 +27,7 @@ builder.Services.AddDbContext<AuthDbContext>(option =>
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 
-// Add services to the container.
+// Agregar servicios al contenedor.
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
@@ -36,13 +36,13 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthDomainBl, AuthDomainBl>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Obtenga más información sobre la configuración de Swagger/OpenAPI en https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configurar el pipeline de solicitudes HTTP.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -60,6 +60,9 @@ ApplyMigration();
 
 app.Run();
 
+/// <summary>
+/// Aplica las migraciones pendientes en la base de datos.
+/// </summary>
 void ApplyMigration()
 {
     using (var scope = app.Services.CreateScope())

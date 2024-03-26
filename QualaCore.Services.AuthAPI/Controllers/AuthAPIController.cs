@@ -5,21 +5,31 @@ using QualaCore.Services.AuthAPI.Domain.Interface;
 
 namespace QualaCore.Services.AuthAPI.Controllers
 {
+    /// <summary>
+    /// Controlador para la API de autenticación
+    /// </summary>
     [Route("api/auth")]
     [ApiController]
     public class AuthAPIController : ControllerBase
     {
-
         private readonly IAuthDomainBl _authDomainBl;
         private ResponseDTO _response;
 
+        /// <summary>
+        /// Constructor de la clase AuthAPIController
+        /// </summary>
+        /// <param name="authDomainBl">Instancia de la interfaz IAuthDomainBl</param>
         public AuthAPIController(IAuthDomainBl authDomainBl)
         {
             _authDomainBl = authDomainBl;
             _response = new();
         }
 
-        // Crear handler para registro de usuarios
+        /// <summary>
+        /// Manejador para el registro de usuarios
+        /// </summary>
+        /// <param name="userModel">Modelo de solicitud de registro</param>
+        /// <returns>Resultado de la operación de registro</returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO userModel)
         {
@@ -35,12 +45,16 @@ namespace QualaCore.Services.AuthAPI.Controllers
                 _response.IsSuccess = true;
                 _response.Message = "Registro completado con éxito !";
                 return Ok(_response);
-            }            
+            }
         }
 
-        
+        /// <summary>
+        /// Manejador para el inicio de sesión de usuarios
+        /// </summary>
+        /// <param name="modelUser">Modelo de solicitud de inicio de sesión</param>
+        /// <returns>Resultado del inicio de sesión</returns>
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody]LoginRequestDTO modelUser)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO modelUser)
         {
             var logginResponse = await _authDomainBl.LoginBl(modelUser);
             if (logginResponse.User == null)
@@ -58,6 +72,11 @@ namespace QualaCore.Services.AuthAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Manejador para asignar un rol a un usuario
+        /// </summary>
+        /// <param name="modelUser">Modelo de solicitud de asignación de rol</param>
+        /// <returns>Resultado de la asignación de rol</returns>
         [HttpPost("AssignRole")]
         public async Task<IActionResult> AssignRole([FromBody] RegisterRequestDTO modelUser)
         {

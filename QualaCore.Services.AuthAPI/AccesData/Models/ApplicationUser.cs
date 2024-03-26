@@ -2,8 +2,14 @@
 
 namespace QualaCore.Services.AuthAPI.AccesData.Models
 {
-    public class ApplicationUser: IdentityUser
+    /// <summary>
+    /// Representa un usuario de la aplicación.
+    /// </summary>
+    public class ApplicationUser : IdentityUser
     {
+        /// <summary>
+        /// Obtiene o establece el nombre del usuario.
+        /// </summary>
         public string Name { get; set; }
     }
 }

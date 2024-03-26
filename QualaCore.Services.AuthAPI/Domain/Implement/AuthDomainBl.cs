@@ -6,14 +6,24 @@ using QualaCore.Services.AuthAPI.Domain.Interface;
 
 namespace QualaCore.Services.AuthAPI.Domain.Implement
 {
-    public class AuthDomainBl: IAuthDomainBl
+    /// <summary>
+    /// Clase de implementación de la lógica de negocio de autenticación.
+    /// </summary>
+    public class AuthDomainBl : IAuthDomainBl
     {
         private readonly AuthDbContext _authDbContext;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public AuthDomainBl(AuthDbContext authDbContext, UserManager <ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IJwtTokenGenerator jwtTokenGenerator)
+        /// <summary>
+        /// Constructor de la clase AuthDomainBl.
+        /// </summary>
+        /// <param name="authDbContext">Contexto de base de datos de autenticación.</param>
+        /// <param name="userManager">Administrador de usuarios.</param>
+        /// <param name="roleManager">Administrador de roles.</param>
+        /// <param name="jwtTokenGenerator">Generador de tokens JWT.</param>
+        public AuthDomainBl(AuthDbContext authDbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IJwtTokenGenerator jwtTokenGenerator)
         {
             _authDbContext = authDbContext;
             _roleManager = roleManager;
@@ -21,21 +31,24 @@ namespace QualaCore.Services.AuthAPI.Domain.Implement
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-
-
+        /// <summary>
+        /// Método para realizar el inicio de sesión.
+        /// </summary>
+        /// <param name="loginRequestDTO">Datos de solicitud de inicio de sesión.</param>
+        /// <returns>Objeto LoginResponseDTO que contiene el usuario y el token de acceso.</returns>
         public async Task<LoginResponseDTO> LoginBl(LoginRequestDTO loginRequestDTO)
         {
             var user = _authDbContext.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
 
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
 
-            if(user == null || isValid == false)
+            if (user == null || isValid == false)
             {
-                return new LoginResponseDTO() { User = null, Token ="" };
+                return new LoginResponseDTO() { User = null, Token = "" };
             }
 
             var roles = await _userManager.GetRolesAsync(user);
-            var token = _jwtTokenGenerator.GenerateToken(user,roles);
+            var token = _jwtTokenGenerator.GenerateToken(user, roles);
 
             UserDTO userDTO = new UserDTO()
             {
@@ -52,11 +65,13 @@ namespace QualaCore.Services.AuthAPI.Domain.Implement
             };
 
             return loginResponseDTO;
-
-
-
         }
 
+        /// <summary>
+        /// Método para registrar un nuevo usuario.
+        /// </summary>
+        /// <param name="registerRequestDTO">Datos de solicitud de registro.</param>
+        /// <returns>Un mensaje de error en caso de fallo, o una cadena vacía en caso de éxito.</returns>
         public async Task<string> RegisterBl(RegisterRequestDTO registerRequestDTO)
         {
             ApplicationUser user = new()
@@ -66,7 +81,6 @@ namespace QualaCore.Services.AuthAPI.Domain.Implement
                 NormalizedEmail = registerRequestDTO.Email.ToUpper(),
                 Name = registerRequestDTO.Name,
                 PhoneNumber = registerRequestDTO.PhoneNumber
-
             };
 
             try
@@ -89,15 +103,20 @@ namespace QualaCore.Services.AuthAPI.Domain.Implement
                 {
                     return result.Errors.FirstOrDefault().Description;
                 }
-
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                
+
             }
             return "Error al registrar usuario";
         }
 
+        /// <summary>
+        /// Método para asignar un rol a un usuario.
+        /// </summary>
+        /// <param name="email">Correo electrónico del usuario.</param>
+        /// <param name="roleName">Nombre del rol a asignar.</param>
+        /// <returns>true si se asignó el rol correctamente, false en caso contrario.</returns>
         public async Task<bool> AssignRole(string email, string roleName)
         {
             var user = _authDbContext.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());

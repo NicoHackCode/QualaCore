@@ -5,8 +5,16 @@ using System.Text;
 
 namespace QualaCore.Services.BranchOfficeAPI.Extension
 {
+    /// <summary>
+    /// Clase de extensión para la configuración de autenticación de la aplicación.
+    /// </summary>
     public static class WebApplicationBuilderExtensions
     {
+        /// <summary>
+        /// Agrega la autenticación de la aplicación.
+        /// </summary>
+        /// <param name="builder">El objeto WebApplicationBuilder.</param>
+        /// <returns>El objeto WebApplicationBuilder con la autenticación agregada.</returns>
         public static WebApplicationBuilder AddAppAuthentication(this WebApplicationBuilder builder)
         {
             var settingsSection = builder.Configuration.GetSection("ApiSettings");
@@ -17,10 +25,12 @@ namespace QualaCore.Services.BranchOfficeAPI.Extension
 
             var key = Encoding.ASCII.GetBytes(secret);
 
-            builder.Services.AddAuthentication(x => {
+            builder.Services.AddAuthentication(x =>
+            {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x => {
+            }).AddJwtBearer(x =>
+            {
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
